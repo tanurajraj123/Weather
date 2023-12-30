@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Web App</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightblue;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+        }
+
+        fieldset {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .loader {
+            display: none;
+        }
+
+        .weather-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Weather Web App</h1>
+    </header>
+
+    <fieldset>
+        <legend>Enter City</legend>
+        <label for="city">City:</label>
+        <input type="text" id="city" required>
+        <button id="btn">Get Weather</button>
+
+        <div class="loader">Loading...</div>
+
+        <div class="weather-info"></div>
+
+        <script>
+            document.getElementById('btn').addEventListener('click', function() {
+    var city = document.getElementById('city').value;
+    var apiKey = "1cf90c94a80626f94d22ecfd488fdd0b";
+    var url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            var weatherInfo = document.querySelector('.weather-info');
+            weatherInfo.innerHTML = `
+                <h2>${data.name}</h2>
+                <p>Temperature: ${data.main.temp}�C</p>
+                <p>Condition: ${data.weather[0].main}</p>
+                <img src="https://openweathermap.org/img/w/${data.weather[0].icon}.png" alt="Weather Icon">
+            `;
+        })
+        .catch(error => {
+            console.error('Error fetching weather data:', error);
+            var weatherInfo = document.querySelector('.weather-info');
+            weatherInfo.innerHTML = '<p>Error fetching weather data. Please try again.</p>';
+        });
+});
+
+			
+
+                
+        </script>
+    </fieldset>
+
+</body>
+</html>
